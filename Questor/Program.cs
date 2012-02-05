@@ -10,7 +10,10 @@
 using System;
 using System.Windows.Forms;
 using System.Collections.Generic;
+using System.Xml;
+using System.Net.Sockets;
 using Mono.Options;
+using System.Threading;
 
 namespace Questor
 {
@@ -166,6 +169,12 @@ namespace Questor
                     if (window.Html.Contains("Please make sure your characters are out of harms way"))
                         continue;
 
+                    if (window.Html.Contains("The client's local session"))
+                    {
+                        window.Close();
+                        continue;
+                    }
+
                     if (window.Name == "telecom")
                         continue;
 
@@ -210,6 +219,8 @@ namespace Questor
             {
                 Logging.Log("Login account [" + _username + "]");
                 _directEve.Login.Login(_username, _password);
+                Logging.Log("Waiting 5 Seconds for Charackter Selection Screen");
+                System.Threading.Thread.Sleep(5000);
                 return;
             }
 
